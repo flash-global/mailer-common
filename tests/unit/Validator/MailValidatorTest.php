@@ -15,7 +15,7 @@ class MailValidatorTest extends Unit
         $mail = new Mail();
         $mail->setSubject('Subject')
             ->setHtmlBody('HtmlBody')
-            ->setSender('sender@test.com', 'Sender Name')
+            ->setSender('sender@test.com')
             ->setRecipients(['another@test.com' => 'another@test.com', 'other@test.com' => 'Recipient Name']);
 
         $result = $validator->validate($mail);
@@ -61,12 +61,16 @@ class MailValidatorTest extends Unit
         $this->assertNotEmpty($validator->getErrors());
         $this->assertEquals(['sender' => ['Sender is null']], $validator->getErrors());
 
-        $mail->setSender('sender@test.com', 'Sender Name');
+        $mail->setSender('sender@test.com');
         $validator->clearErrors();
         $validator->validateSender($mail->getSender());
         $this->assertEmpty($validator->getErrors());
 
-        $mail->setSender('not a email', 'Sender Name');
+        $mail->setSender(['sender@test.com' => 'Name']);
+        $validator->validateSender($mail->getSender());
+        $this->assertEmpty($validator->getErrors());
+
+        $mail->setSender('not a email');
         $validator->validateSender($mail->getSender());
         $this->assertNotEmpty($validator->getErrors());
         $this->assertEquals(['sender' => ['Sender recipient must be a valid email address']], $validator->getErrors());

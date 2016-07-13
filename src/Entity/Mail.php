@@ -1,171 +1,173 @@
 <?php
-    namespace Fei\Service\Mailer\Entity;
 
-    use Fei\Entity\AbstractEntity;
+namespace Fei\Service\Mailer\Entity;
 
+use Fei\Entity\AbstractEntity;
+
+/**
+ * Class Mail
+ */
+class Mail extends AbstractEntity
+{
+    /**
+     * @var string
+     */
+    protected $subject;
 
     /**
-     * Class Mail
+     * @var string
      */
-    class Mail extends AbstractEntity
+    protected $textBody;
+
+    /**
+     * @var string
+     */
+    protected $htmlBody;
+
+    /**
+     * @var array
+     */
+    protected $sender;
+
+    /**
+     * @var array
+     */
+    protected $recipients = array();
+
+    /**
+     * @return string
+     */
+    public function getSubject()
     {
-        /**
-         * @var string
-         */
-        protected $subject;
+        return $this->subject;
+    }
 
-        /**
-         * @var string
-         */
-        protected $textBody;
+    /**
+     * @param string $subject
+     *
+     * @return $this
+     */
+    public function setSubject($subject)
+    {
+        $this->subject = $subject;
 
-        /**
-         * @var string
-         */
-        protected $htmlBody;
+        return $this;
+    }
 
-        /**
-         * @var array
-         */
-        protected $sender;
+    /**
+     * @return string
+     */
+    public function getTextBody()
+    {
+        return $this->textBody;
+    }
 
-        /**
-         * @var array
-         */
-        protected $recipients = array();
+    /**
+     * @param string $textBody
+     *
+     * @return $this
+     */
+    public function setTextBody($textBody)
+    {
+        $this->textBody = $textBody;
 
-        /**
-         * @return string
-         */
-        public function getSubject()
-        {
-            return $this->subject;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHtmlBody()
+    {
+        return $this->htmlBody;
+    }
+
+    /**
+     * @param string $htmlBody
+     *
+     * @return $this
+     */
+    public function setHtmlBody($htmlBody)
+    {
+        $this->htmlBody = $htmlBody;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSender()
+    {
+        return $this->sender;
+    }
+
+    /**
+     * @param string|array $sender
+     *
+     * @return $this
+     */
+    public function setSender($sender)
+    {
+        if (is_array($sender)) {
+            $email = is_int(key($sender)) ? current($sender) : key($sender);
+            $this->sender = [$email => current($sender)];
+        } else {
+            $this->sender = [$sender => $sender];
         }
 
-        /**
-         * @param string $subject
-         *
-         * @return $this
-         */
-        public function setSubject($subject)
-        {
-            $this->subject = $subject;
+        return $this;
+    }
 
-            return $this;
-        }
+    /**
+     * @return array
+     */
+    public function getRecipients()
+    {
+        return $this->recipients;
+    }
 
-        /**
-         * @return string
-         */
-        public function getTextBody()
-        {
-            return $this->textBody;
-        }
+    /**
+     * @param array $recipients
+     *
+     * @return $this
+     */
+    public function setRecipients(array $recipients)
+    {
+        $this->clearRecipients();
 
-        /**
-         * @param string $textBody
-         *
-         * @return $this
-         */
-        public function setTextBody($textBody)
-        {
-            $this->textBody = $textBody;
-
-            return $this;
-        }
-
-        /**
-         * @return string
-         */
-        public function getHtmlBody()
-        {
-            return $this->htmlBody;
-        }
-
-        /**
-         * @param string $htmlBody
-         *
-         * @return $this
-         */
-        public function setHtmlBody($htmlBody)
-        {
-            $this->htmlBody = $htmlBody;
-
-            return $this;
-        }
-
-        /**
-         * @return array
-         */
-        public function getSender()
-        {
-            return $this->sender;
-        }
-
-        /**
-         * @param string $recipient
-         * @param string $label
-         *
-         * @return $this
-         */
-        public function setSender($recipient, $label  = '')
-        {
-            $label = $label ?: $recipient;
-
-            $this->sender = [$recipient => $label];
-
-            return $this;
-        }
-
-        /**
-         * @return array
-         */
-        public function getRecipients()
-        {
-            return $this->recipients;
-        }
-
-        /**
-         * @param array $recipients
-         *
-         * @return $this
-         */
-        public function setRecipients(array $recipients)
-        {
-            $this->clearRecipients();
-
-            foreach ($recipients as $recipient => $label)
-            {
-
-                if(is_int($recipient)) $recipient = $label;
-
-                $this->addRecipient($recipient, $label);
+        foreach ($recipients as $recipient => $label) {
+            if (is_int($recipient)) {
+                $recipient = $label;
             }
 
-            return $this;
+            $this->addRecipient($recipient, $label);
         }
 
-        /**
-         * @param  string $recipient    Recipient email address
-         * @param string $label         Recipient full name (defaults to email address)
-         *
-         * @return $this
-         */
-        public function addRecipient($recipient, $label = '')
-        {
-            $label = $label ?: $recipient;
-            $this->recipients[$recipient] = $label;
-
-            return $this;
-        }
-
-        /**
-         * @return $this
-         */
-        public function clearRecipients()
-        {
-            $this->recipients = array();
-
-            return $this;
-        }
+        return $this;
     }
+
+    /**
+     * @param  string $recipient Recipient email address
+     * @param string $label Recipient full name (defaults to email address)
+     *
+     * @return $this
+     */
+    public function addRecipient($recipient, $label = '')
+    {
+        $label = $label ?: $recipient;
+        $this->recipients[$recipient] = $label;
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function clearRecipients()
+    {
+        $this->recipients = array();
+
+        return $this;
+    }
+}
