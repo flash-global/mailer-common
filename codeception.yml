@@ -13,10 +13,12 @@ extensions:
     enabled:
         - Codeception\Extension\RunFailed
 coverage:
-    enable: true
-    whitelist:
-        include:
-            - src/*
+    enabled: true
+    remote: false
+    include:
+        - src/*
+    exclude:
+        - vendor/*
 modules:
     config:
         Db:
