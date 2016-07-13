@@ -9,7 +9,6 @@
      */
     class Mail extends AbstractEntity
     {
-
         /**
          * @var string
          */
@@ -26,7 +25,7 @@
         protected $htmlBody;
 
         /**
-         * @var string
+         * @var array
          */
         protected $sender;
 
@@ -36,7 +35,7 @@
         protected $recipients = array();
 
         /**
-         * @return mixed
+         * @return string
          */
         public function getSubject()
         {
@@ -44,7 +43,7 @@
         }
 
         /**
-         * @param mixed $subject
+         * @param string $subject
          *
          * @return $this
          */
@@ -56,7 +55,7 @@
         }
 
         /**
-         * @return mixed
+         * @return string
          */
         public function getTextBody()
         {
@@ -64,7 +63,7 @@
         }
 
         /**
-         * @param mixed $textBody
+         * @param string $textBody
          *
          * @return $this
          */
@@ -76,7 +75,7 @@
         }
 
         /**
-         * @return mixed
+         * @return string
          */
         public function getHtmlBody()
         {
@@ -84,7 +83,7 @@
         }
 
         /**
-         * @param mixed $htmlBody
+         * @param string $htmlBody
          *
          * @return $this
          */
@@ -96,7 +95,7 @@
         }
 
         /**
-         * @return mixed
+         * @return array
          */
         public function getSender()
         {
@@ -104,19 +103,22 @@
         }
 
         /**
-         * @param mixed $sender
+         * @param string $recipient
+         * @param string $label
          *
          * @return $this
          */
-        public function setSender($sender)
+        public function setSender($recipient, $label  = '')
         {
-            $this->sender = $sender;
+            $label = $label ?: $recipient;
+
+            $this->sender = [$recipient => $label];
 
             return $this;
         }
 
         /**
-         * @return mixed
+         * @return array
          */
         public function getRecipients()
         {
@@ -124,7 +126,7 @@
         }
 
         /**
-         * @param mixed $recipients
+         * @param array $recipients
          *
          * @return $this
          */

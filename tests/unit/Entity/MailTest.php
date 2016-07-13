@@ -41,8 +41,11 @@
             $mail = new Mail();
             $mail->setSender('test');
         
-            $this->assertAttributeEquals('test', 'sender', $mail);
-            $this->assertEquals('test', $mail->getSender());
+            $this->assertAttributeEquals(['test' => 'test'], 'sender', $mail);
+            $this->assertEquals(['test' => 'test'], $mail->getSender());
+
+            $mail->setSender('email@email.com', 'test');
+            $this->assertEquals(['email@email.com' => 'test'], $mail->getSender());
         }
     
         public function testRecipientsAccessors()
