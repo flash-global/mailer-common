@@ -1,0 +1,39 @@
+{
+  "name": "fei/mailer-common",
+  "description": "Flash mailer - common components",
+  "type": "library",
+  "keywords": [
+    "mailer"
+  ],
+
+  "authors": [
+    {
+      "name": "Gauthier Delamarre",
+      "email": "gauthier@opcoding.eu",
+      "role": "lead"
+    },
+    {
+      "name": "Vincent Simonin",
+      "email": "vsi@opcoding.eu",
+      "role": "developer"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://composer.flash-global.net"
+    }
+  ],
+  "require": {
+    "fei/entities": "1.*"
+  },
+  "require-dev": {
+    "codeception/codeception": "2.*"
+
+  },
+  "autoload": {
+    "psr-4": {
+      "Fei\\Service\\Mailer\\": "src"
+    }
+  }
+}
