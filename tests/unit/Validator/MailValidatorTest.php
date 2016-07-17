@@ -29,13 +29,15 @@ class MailValidatorTest extends Unit
         $validator = new MailValidator();
         $mail = new Mail();
 
-        $validator->validateSubject($mail->getSubject());
+        $result = $validator->validateSubject($mail->getSubject());
+        $this->assertFalse($result);
         $this->assertNotEmpty($validator->getErrors());
         $this->assertEquals(['subject' => ['Subject is empty']], $validator->getErrors());
 
         $mail->setSubject('Subject');
         $validator->clearErrors();
-        $validator->validateSubject($mail->getSubject());
+        $result = $validator->validateSubject($mail->getSubject());
+        $this->assertTrue($result);
         $this->assertEmpty($validator->getErrors());
     }
 
@@ -44,10 +46,11 @@ class MailValidatorTest extends Unit
         $validator = new MailValidator();
         $mail = new Mail();
 
-        $validator->validateBody($mail->getTextBody(), $mail->getHtmlBody());
+        $result = $validator->validateBody($mail->getTextBody(), $mail->getHtmlBody());
+        $this->assertFalse($result);
         $this->assertNotEmpty($validator->getErrors());
         $this->assertEquals(
-            ['textBody' => ['Text body is empty'], 'htmlBody' => ['HTML body is empty']],
+            ['body' => ['Both text and html bodies are empty']],
             $validator->getErrors()
         );
     }
@@ -57,22 +60,26 @@ class MailValidatorTest extends Unit
         $validator = new MailValidator();
         $mail = new Mail();
 
-        $validator->validateSender($mail->getSender());
+        $result = $validator->validateSender($mail->getSender());
+        $this->assertFalse($result);
         $this->assertNotEmpty($validator->getErrors());
         $this->assertEquals(['sender' => ['Sender is null']], $validator->getErrors());
 
         $mail->setSender('sender@test.com');
         $validator->clearErrors();
-        $validator->validateSender($mail->getSender());
+        $result = $validator->validateSender($mail->getSender());
+        $this->assertTrue($result);
         $this->assertEmpty($validator->getErrors());
 
         $mail->setSender(['sender@test.com' => 'Name']);
-        $validator->validateSender($mail->getSender());
+        $result = $validator->validateSender($mail->getSender());
+        $this->assertTrue($result);
         $this->assertEmpty($validator->getErrors());
 
         $mail->setSender('not a email');
-        $validator->validateSender($mail->getSender());
+        $result = $validator->validateSender($mail->getSender());
         $this->assertNotEmpty($validator->getErrors());
+        $this->assertFalse($result);
         $this->assertEquals(['sender' => ['Sender recipient must be a valid email address']], $validator->getErrors());
     }
 
@@ -81,18 +88,20 @@ class MailValidatorTest extends Unit
         $validator = new MailValidator();
         $mail = new Mail();
 
-        $validator->validateRecipients($mail->getRecipients());
+        $result = $validator->validateRecipients($mail->getRecipients());
         $this->assertNotEmpty($validator->getErrors());
+        $this->assertFalse($result);
         $this->assertEquals(['recipients' => ['Recipients is empty']], $validator->getErrors());
 
         $mail->addRecipient('mail@address.com');
         $validator->clearErrors();
-        $validator->validateRecipients($mail->getRecipients());
+        $result = $validator->validateRecipients($mail->getRecipients());
         $this->assertEmpty($validator->getErrors());
+        $this->assertTrue($result);
 
         $mail->addRecipient('not a email address', 'first label');
         $mail->addRecipient('another not a email address', 'second label');
-        $validator->validateRecipients($mail->getRecipients());
+        $result = $validator->validateRecipients($mail->getRecipients());
         $this->assertNotEmpty($validator->getErrors());
         $this->assertEquals(
             ['recipients' => [
@@ -101,6 +110,7 @@ class MailValidatorTest extends Unit
             ]],
             $validator->getErrors()
         );
+        $this->assertFalse($result);
     }
 
     public function testErrorsAccessors()
