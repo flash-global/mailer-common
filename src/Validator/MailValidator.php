@@ -176,4 +176,18 @@
             
             return $this;
         }
+    
+        /**
+         * @return string
+         */
+        public function getErrorsAsString()
+        {
+            $errors = array();
+            foreach($this->getErrors() as $attribute => $attrErrors)
+            {
+                $errors[] = $attribute . ': ' . implode(', ', $attrErrors);
+            }
+            
+            return implode('; ', $errors);
+        }
     }

@@ -129,4 +129,15 @@ class MailValidatorTest extends Unit
             $validator->getErrors()
         );
     }
+    
+    public function testErrorsToStringConversion()
+    {
+        $validator = new MailValidator();
+        $validator->setErrors(
+            ['attribute' => 'message', 'otherAttribute' => ['otherMessage', 'anotherMessage']]
+        );
+        
+        $this->assertEquals('attribute: message; otherAttribute: otherMessage, anotherMessage', $validator->getErrorsAsString());
+            
+    }
 }
