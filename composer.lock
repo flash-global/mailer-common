@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "43c8ecde01e6522622da1af6653794bb",
-    "content-hash": "ead302d5e72d2b31795744b28de1d4f6",
+    "hash": "5ae3d625d11d86d8f92bd0014f7f1106",
+    "content-hash": "4e725bfd3857ef5ab816263c2f9eb081",
     "packages": [
         {
             "name": "fei/entities",
-            "version": "v1.0.1",
+            "version": "v1.0.3",
             "source": {
                 "type": "git",
                 "url": "git@github.com:flash-global/entities.git",
-                "reference": "c2c64909056661bbb732d629b4e6913d97295f11"
+                "reference": "d2e632223448fe37f478508eb3081a1f97b2d427"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/flash-global/entities/zipball/c2c64909056661bbb732d629b4e6913d97295f11",
-                "reference": "c2c64909056661bbb732d629b4e6913d97295f11",
+                "url": "https://api.github.com/repos/flash-global/entities/zipball/d2e632223448fe37f478508eb3081a1f97b2d427",
+                "reference": "d2e632223448fe37f478508eb3081a1f97b2d427",
                 "shasum": ""
             },
             "require-dev": {
@@ -36,10 +36,10 @@
             ],
             "description": "Entities descriptors and helpers",
             "support": {
-                "source": "https://github.com/flash-global/entities/tree/develop",
+                "source": "https://github.com/flash-global/entities/tree/v1.0.3",
                 "issues": "https://github.com/flash-global/entities/issues"
             },
-            "time": "2016-07-12 14:16:00"
+            "time": "2016-07-18 08:19:41"
         }
     ],
     "packages-dev": [

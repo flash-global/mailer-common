@@ -25,7 +25,7 @@
     }
   ],
   "require": {
-    "fei/entities": "1.*"
+    "fei/entities": "^1.0.3"
   },
   "require-dev": {
     "codeception/codeception": "2.*"

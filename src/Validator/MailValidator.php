@@ -2,6 +2,9 @@
     
     namespace Fei\Service\Mailer\Validator;
     
+    use Fei\Entity\EntityInterface;
+    use Fei\Entity\Exception;
+    use Fei\Entity\Validator\AbstractValidator;
     use Fei\Service\Mailer\Entity\Mail;
     
     /**
@@ -9,20 +12,23 @@
      *
      * @package Fei\Service\Mailer\Validator
      */
-    class MailValidator
+    class MailValidator extends AbstractValidator
     {
-        /**
-         * @var array
-         */
-        protected $errors = array();
+        
         
         /**
          * @param Mail $mail
          *
          * @return bool
          */
-        public function validate(Mail $mail)
+        public function validate(EntityInterface $mail)
         {
+            
+            if(!$mail instanceof Mail)
+            {
+                throw new Exception('Entity to validate must be an instance of ' . Mail::class);
+            }
+            
             $this->clearErrors();
             
             $this->validateSubject($mail->getSubject());
@@ -119,75 +125,6 @@
             return $success;
         }
         
-        /**
-         * @param array $errors
-         *
-         * @return $this
-         */
-        public function setErrors(array $errors)
-        {
-            $this->clearErrors();
-            
-            foreach ($errors as $attribute => $messages)
-            {
-                if (is_array($messages))
-                {
-                    foreach ($messages as $message)
-                    {
-                        $this->addError($attribute, $message);
-                    }
-                }
-                else
-                {
-                    $this->addError($attribute, $messages);
-                }
-            }
-            
-            return $this;
-        }
         
-        /**
-         * @return array
-         */
-        public function getErrors()
-        {
-            return $this->errors;
-        }
         
-        /**
-         * @param string $attribute
-         * @param string $message
-         *
-         * @return $this
-         */
-        public function addError($attribute, $message)
-        {
-            $this->errors[$attribute][] = $message;
-            
-            return $this;
-        }
-        
-        /**
-         * @return $this
-         */
-        public function clearErrors()
-        {
-            $this->errors = array();
-            
-            return $this;
-        }
-    
-        /**
-         * @return string
-         */
-        public function getErrorsAsString()
-        {
-            $errors = array();
-            foreach($this->getErrors() as $attribute => $attrErrors)
-            {
-                $errors[] = $attribute . ': ' . implode(', ', $attrErrors);
-            }
-            
-            return implode('; ', $errors);
-        }
     }
