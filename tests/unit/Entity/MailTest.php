@@ -1,8 +1,8 @@
 <?php
 
     namespace Tests\Fei\Service\Mailer\Entity;
-    
-    
+
+
     use Codeception\Test\Unit;
     use Fei\Service\Mailer\Entity\Mail;
 
@@ -26,7 +26,7 @@
             $this->assertAttributeEquals('test', 'textBody', $mail);
             $this->assertEquals('test', $mail->getTextBody());
         }
-        
+
         public function testHtmlBodyAccessors()
         {
             $mail = new Mail();
@@ -35,12 +35,12 @@
             $this->assertAttributeEquals('test', 'htmlBody', $mail);
             $this->assertEquals('test', $mail->getHtmlBody());
         }
-    
+
         public function testSenderAccessors()
         {
             $mail = new Mail();
             $mail->setSender('test');
-        
+
             $this->assertAttributeEquals(['test' => 'test'], 'sender', $mail);
             $this->assertEquals(['test' => 'test'], $mail->getSender());
 
@@ -53,7 +53,7 @@
             $mail->setSender(['email@email.com' => 'Name']);
             $this->assertEquals(['email@email.com' => 'Name'], $mail->getSender());
         }
-    
+
         public function testRecipientsAccessors()
         {
             $mail = new Mail();
@@ -65,6 +65,28 @@
             $mail->setRecipients(['another@test.com', 'other@test.com' => 'Recipient Name']);
             $this->assertEquals(['another@test.com' => 'another@test.com', 'other@test.com' => 'Recipient Name'], $mail->getRecipients());
         }
-    
-    
+
+        public function testCcAccessors()
+        {
+            $mail = new Mail();
+
+            $mail->setCc(['test@test.com']);
+            $this->assertAttributeEquals(['test@test.com' => 'test@test.com'], 'cc', $mail);
+            $this->assertEquals(['test@test.com' => 'test@test.com'], $mail->getCc());
+
+            $mail->setCc(['another@test.com', 'other@test.com' => 'Recipient Name']);
+            $this->assertEquals(['another@test.com' => 'another@test.com', 'other@test.com' => 'Recipient Name'], $mail->getCc());
+        }
+
+        public function testBccAccessors()
+        {
+            $mail = new Mail();
+
+            $mail->setBcc(['test@test.com']);
+            $this->assertAttributeEquals(['test@test.com' => 'test@test.com'], 'bcc', $mail);
+            $this->assertEquals(['test@test.com' => 'test@test.com'], $mail->getBcc());
+
+            $mail->setBcc(['another@test.com', 'other@test.com' => 'Recipient Name']);
+            $this->assertEquals(['another@test.com' => 'another@test.com', 'other@test.com' => 'Recipient Name'], $mail->getBcc());
+        }
     }

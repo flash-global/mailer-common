@@ -32,9 +32,12 @@
             $this->validateSubject($mail->getSubject());
             $this->validateBody($mail->getTextBody(), $mail->getHtmlBody());
             $this->validateSender($mail->getSender());
-            $this->validateRecipients($mail->getRecipients());
+            $this->validateAddress($mail->getRecipients(), 'recipients');
+            $this->validateAddress($mail->getCc(), 'cc', false);
+            $this->validateAddress($mail->getBcc(), 'bcc', false);
 
             $errors = $this->getErrors();
+
             return empty($errors);
         }
 
@@ -96,26 +99,38 @@
         }
 
         /**
-         * @param array $recipients
+         * Validate address fields
+         *
+         * @param array  $address
+         * @param string $field
+         * @param bool   $isRequired
          *
          * @return bool
          */
-        public function validateRecipients($recipients)
+        public function validateAddress($address, $field, $isRequired = true)
         {
-            if (empty($recipients))
+            if ($isRequired && empty($address))
             {
-                $this->addError('recipients', 'Recipients is empty');
+                $this->addError($field, sprintf('%s is empty', ucfirst($field)));
                 return false;
             }
 
             $success = true;
-            foreach ($recipients as $recipient => $label)
+            foreach ($address as $email => $label)
             {
-                if (false === filter_var($recipient, FILTER_VALIDATE_EMAIL))
-                {
+                if (!is_scalar($label)) {
                     $this->addError(
-                        'recipients',
-                        sprintf('`%s` is not a valid email address for recipient `%s`', $recipient, $label)
+                        $field,
+                        sprintf('Label for %s is not scalar, `%s` given', $field, gettype($label))
+                    );
+                    $label = gettype($label);
+                    $success = false;
+                }
+
+                if (false === filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $this->addError(
+                        $field,
+                        sprintf('`%s` is not a valid email address for %s `%s`', $email, $field, $label)
                     );
                     $success = false;
                 }

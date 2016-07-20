@@ -6,6 +6,8 @@ use Fei\Entity\AbstractEntity;
 
 /**
  * Class Mail
+ *
+ * @package Fei\Service\Mailer\Entity
  */
 class Mail extends AbstractEntity
 {
@@ -33,6 +35,16 @@ class Mail extends AbstractEntity
      * @var array
      */
     protected $recipients = array();
+
+    /**
+     * @var array
+     */
+    protected $cc = array();
+
+    /**
+     * @var array
+     */
+    protected $bcc = array();
 
     /**
      * @return string
@@ -111,9 +123,9 @@ class Mail extends AbstractEntity
     {
         if (is_array($sender)) {
             $email = is_int(key($sender)) ? current($sender) : key($sender);
-            $this->sender = [$email => current($sender)];
+            $this->sender = array($email => current($sender));
         } else {
-            $this->sender = [$sender => $sender];
+            $this->sender = array($sender => $sender);
         }
 
         return $this;
@@ -134,29 +146,20 @@ class Mail extends AbstractEntity
      */
     public function setRecipients(array $recipients)
     {
-        $this->clearRecipients();
-
-        foreach ($recipients as $recipient => $label) {
-            if (is_int($recipient)) {
-                $recipient = $label;
-            }
-
-            $this->addRecipient($recipient, $label);
-        }
+        $this->initAddress($recipients, 'recipients');
 
         return $this;
     }
 
     /**
-     * @param  string $recipient Recipient email address
+     * @param string $recipient Recipient email address
      * @param string $label Recipient full name (defaults to email address)
      *
      * @return $this
      */
     public function addRecipient($recipient, $label = '')
     {
-        $label = $label ?: $recipient;
-        $this->recipients[$recipient] = $label;
+        $this->addAddress($recipient, $label, 'recipients');
 
         return $this;
     }
@@ -169,5 +172,140 @@ class Mail extends AbstractEntity
         $this->recipients = array();
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCc()
+    {
+        return $this->cc;
+    }
+
+    /**
+     * @param array $cc
+     *
+     * @return $this
+     */
+    public function setCc(array $cc)
+    {
+        $this->initAddress($cc, 'cc');
+
+        return $this;
+    }
+
+    /**
+     * @param string $cc
+     * @param string $label
+     *
+     * @return $this
+     */
+    public function addCc($cc, $label)
+    {
+        $this->addAddress($cc, $label, 'cc');
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function clearCc()
+    {
+        $this->cc = array();
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getBcc()
+    {
+        return $this->bcc;
+    }
+
+    /**
+     * @param array $bcc
+     *
+     * @return $this
+     */
+    public function setBcc(array $bcc)
+    {
+        $this->initAddress($bcc, 'bcc');
+
+        return $this;
+    }
+
+    /**
+     * @param string $bcc
+     * @param string $label
+     *
+     * @return $this
+     */
+    public function addBcc($bcc, $label)
+    {
+        $this->addAddress($bcc, $label, 'bcc');
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function clearBcc()
+    {
+        $this->bcc = array();
+
+        return $this;
+    }
+
+    /**
+     * Set address purpose property
+     *
+     * @param array  $address
+     * @param string $field
+     */
+    protected function initAddress(array $address, $field)
+    {
+        $this->{$this->methodName('clear', $field)}();
+
+        foreach ($address as $email => $label) {
+            if (is_int($email)) {
+                $email = $label;
+            }
+
+            $this->{$this->methodName('add', $field)}($email, $label);
+        }
+    }
+
+    /**
+     * Add a address in a array property
+     *
+     * @param string $address
+     * @param string $label
+     * @param string $field
+     */
+    protected function addAddress($address, $label, $field)
+    {
+        $label = $label ?: $address;
+        $this->$field[$address] = $label;
+    }
+
+    /**
+     * Returns the method name given a action and a field name
+     *
+     * @param $action
+     * @param $field
+     *
+     * @return string
+     */
+    protected function methodName($action, $field)
+    {
+        if (substr($field, -1, 1) === 's' && $action != 'clear') {
+            $field = substr($field, 0, -1);
+        }
+
+        return $action . ucfirst(strtolower($field));
     }
 }
