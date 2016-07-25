@@ -47,6 +47,11 @@ class Mail extends AbstractEntity
     protected $bcc = array();
 
     /**
+     * @var array
+     */
+    protected $attachments = array();
+
+    /**
      * @return string
      */
     public function getSubject()
@@ -256,6 +261,65 @@ class Mail extends AbstractEntity
     public function clearBcc()
     {
         $this->bcc = array();
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAttachments()
+    {
+        return $this->attachments;
+    }
+
+    /**
+     * @param \SplFileObject[]|array $attachments
+     */
+    public function setAttachments(array $attachments)
+    {
+        $this->clearAttachments();
+
+        foreach ($attachments as $attachment) {
+            $this->addAttachment($attachment);
+        }
+    }
+
+    /**
+     * @param \SplFileObject|array $attachment
+     *
+     * @return $this
+     */
+    public function addAttachment($attachment)
+    {
+        if ($attachment instanceof \SplFileObject && $attachment->isFile() && $attachment->isReadable()) {
+            $file['filename'] = $attachment->getBasename();
+
+            $resource = finfo_open(FILEINFO_MIME_TYPE);
+            $file['mime_type'] = finfo_file($resource, $attachment->getRealPath());
+
+            $file['contents'] = '';
+            while (!$attachment->eof()) {
+                $file['contents'] .= $attachment->fgets();
+            }
+            $file['contents'] = base64_encode($file['contents']);
+
+            $this->attachments[] = $file;
+        } elseif (is_array($attachment)) {
+            $this->attachments[] = $attachment;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clear attachments
+     *
+     * @return $this
+     */
+    public function clearAttachments()
+    {
+        $this->attachments = array();
 
         return $this;
     }
