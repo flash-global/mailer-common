@@ -353,7 +353,9 @@ class Mail extends AbstractEntity
     protected function addAddress($address, $label, $field)
     {
         $label = $label ?: $address;
-        $this->$field[$address] = $label;
+        $this->{$field}[$address] = $label;
+
+	return $this;
     }
 
     /**
