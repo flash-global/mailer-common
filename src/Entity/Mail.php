@@ -354,8 +354,6 @@ class Mail extends AbstractEntity
     {
         $label = $label ?: $address;
         $this->{$field}[$address] = $label;
-
-	return $this;
     }
 
     /**
