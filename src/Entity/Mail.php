@@ -325,6 +325,22 @@ class Mail extends AbstractEntity
     }
 
     /**
+     * Get mail context
+     *
+     * @return array
+     */
+    public function getContext()
+    {
+        return array_filter([
+            'subject' => $this->getSubject(),
+            'from' => $this->addressToString($this->getSender()),
+            'to' => $this->addressToString($this->getRecipients()),
+            'cc' => $this->addressToString($this->getCc()),
+            'bcc' => $this->addressToString($this->getBcc())
+        ]);
+    }
+
+    /**
      * Set address purpose property
      *
      * @param array  $address
@@ -354,6 +370,23 @@ class Mail extends AbstractEntity
     {
         $label = $label ?: $address;
         $this->{$field}[$address] = $label;
+    }
+
+    /**
+     * Convert address container to a string representation
+     *
+     * @param array $field
+     *
+     * @return string
+     */
+    protected function addressToString(array $field)
+    {
+        $address = [];
+        foreach ($field as $key => $value) {
+            $address[] = $key == $value ? $value : sprintf('%s <%s>', $value, $key);
+        }
+
+        return empty($address) ? null : implode(', ', $address);
     }
 
     /**

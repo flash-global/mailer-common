@@ -141,4 +141,23 @@ class MailTest extends Unit
             $mail->getAttachments()
         );
     }
+
+    public function testGetContext()
+    {
+        $mail = new Mail([
+            'subject' => 'test',
+            'sender' => ['vsi@opcoding.eu' => 'Vincent'],
+            'recipients' => ['test@test.com', 'hiphop@php.net' => 'Hip Hop!'],
+            'cc' => ['toto@titi.com'],
+            'bcc' => ['hello@world.com' => 'Hello', 'tata@tonton.com' => 'Tata', 'test@example.com' => 'Test']
+        ]);
+
+        $this->assertEquals([
+            'subject' => 'test',
+            'from' => 'Vincent <vsi@opcoding.eu>',
+            'to' => 'test@test.com, Hip Hop! <hiphop@php.net>',
+            'cc' => 'toto@titi.com',
+            'bcc' => 'Hello <hello@world.com>, Tata <tata@tonton.com>, Test <test@example.com>'
+        ], $mail->getContext());
+    }
 }
