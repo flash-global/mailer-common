@@ -34,6 +34,11 @@ class Mail extends AbstractEntity
     /**
      * @var array
      */
+    protected $replyTo;
+
+    /**
+     * @var array
+     */
     protected $recipients = array();
 
     /**
@@ -126,12 +131,27 @@ class Mail extends AbstractEntity
      */
     public function setSender($sender)
     {
-        if (is_array($sender)) {
-            $email = is_int(key($sender)) ? current($sender) : key($sender);
-            $this->sender = array($email => current($sender));
-        } else {
-            $this->sender = array($sender => $sender);
-        }
+        $this->sender = $this->formatAddress($sender);
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getReplyTo()
+    {
+        return $this->replyTo;
+    }
+
+    /**
+     * @param string|array $replyTo
+     *
+     * @return $this
+     */
+    public function setReplyTo($replyTo)
+    {
+        $this->replyTo = $this->formatAddress($replyTo);
 
         return $this;
     }
@@ -286,17 +306,23 @@ class Mail extends AbstractEntity
     }
 
     /**
-     * @param \SplFileObject|array $attachment
+     * @param \SplFileObject|Attachment|array $attachment
      *
      * @return $this
      */
     public function addAttachment($attachment)
     {
         if ($attachment instanceof \SplFileObject && $attachment->isFile() && $attachment->isReadable()) {
-            $file['filename'] = $attachment->getBasename();
+            $file['filename'] = method_exists($attachment, 'getAttachmentFilename') ?
+                $attachment->getAttachmentFilename() :
+                $attachment->getBasename();
 
-            $resource = finfo_open(FILEINFO_MIME_TYPE);
-            $file['mime_type'] = finfo_file($resource, $attachment->getRealPath());
+            if (method_exists($attachment, 'getMimeType')) {
+                $file['mime_type'] = $attachment->getMimeType();
+            } else {
+                $resource = finfo_open(FILEINFO_MIME_TYPE);
+                $file['mime_type'] = finfo_file($resource, $attachment->getRealPath());
+            }
 
             $file['contents'] = '';
             while (!$attachment->eof()) {
@@ -370,6 +396,23 @@ class Mail extends AbstractEntity
     {
         $label = $label ?: $address;
         $this->{$field}[$address] = $label;
+    }
+
+    /**
+     * Format a address
+     *
+     * @param string|array $address
+     *
+     * @return array
+     */
+    protected function formatAddress($address)
+    {
+        if (is_array($address)) {
+            $email = is_int(key($address)) ? current($address) : key($address);
+            return array($email => current($address));
+        }
+
+        return array($address => $address);
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace Tests\Fei\Service\Mailer\Entity;
 
 use Codeception\Test\Unit;
+use Fei\Service\Mailer\Entity\Attachment;
 use Fei\Service\Mailer\Entity\Mail;
 
 class MailTest extends Unit
@@ -50,6 +51,24 @@ class MailTest extends Unit
 
         $mail->setSender(['email@email.com' => 'Name']);
         $this->assertEquals(['email@email.com' => 'Name'], $mail->getSender());
+    }
+
+    public function testReplyToAccessors()
+    {
+        $mail = new Mail();
+        $mail->setReplyTo('test');
+
+        $this->assertAttributeEquals(['test' => 'test'], 'replyTo', $mail);
+        $this->assertEquals(['test' => 'test'], $mail->getReplyTo());
+
+        $mail->setReplyTo('email@email.com');
+        $this->assertEquals(['email@email.com' => 'email@email.com'], $mail->getReplyTo());
+
+        $mail->setReplyTo(['email@email.com']);
+        $this->assertEquals(['email@email.com' => 'email@email.com'], $mail->getReplyTo());
+
+        $mail->setReplyTo(['email@email.com' => 'Name']);
+        $this->assertEquals(['email@email.com' => 'Name'], $mail->getReplyTo());
     }
 
     public function testRecipientsAccessors()
@@ -139,6 +158,44 @@ class MailTest extends Unit
                 ['a array']
             ],
             $mail->getAttachments()
+        );
+    }
+
+    public function testAttachmentAccessorsWithAttachment()
+    {
+        $mail = new Mail();
+
+        $mail->addAttachment(new Attachment(__DIR__ . '/../../_data/php.pdf'));
+
+        $this->assertAttributeEquals(
+            [
+                [
+                    'filename' => 'php.pdf',
+                    'mime_type' => 'application/pdf',
+                    'contents' => base64_encode(file_get_contents(__DIR__ . '/../../_data/php.pdf'))
+                ]
+            ],
+            'attachments',
+            $mail
+        );
+
+        $attachment = new Attachment(__DIR__ . '/../../_data/php.pdf');
+        $attachment->setAttachmentFilename('test.txt');
+        $attachment->setMimeType('text/plain');
+
+        $mail->clearAttachments();
+        $mail->addAttachment($attachment);
+
+        $this->assertAttributeEquals(
+            [
+                [
+                    'filename' => 'test.txt',
+                    'mime_type' => 'text/plain',
+                    'contents' => base64_encode(file_get_contents(__DIR__ . '/../../_data/php.pdf'))
+                ]
+            ],
+            'attachments',
+            $mail
         );
     }
 
