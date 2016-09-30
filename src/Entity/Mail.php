@@ -317,6 +317,9 @@ class Mail extends AbstractEntity
                 $attachment->getAttachmentFilename() :
                 $attachment->getBasename();
 
+            $file['is_embedded'] = method_exists($attachment, 'getIsEmbedded') ? $attachment->getIsEmbedded() : false;
+            $file['id'] = method_exists($attachment, 'getId') ? $attachment->getId() : null;
+
             if (method_exists($attachment, 'getMimeType')) {
                 $file['mime_type'] = $attachment->getMimeType();
             } else {

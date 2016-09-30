@@ -15,15 +15,27 @@ class Attachment extends \SplFileObject
     protected $mimeType;
 
     /**
+     * @var bool
+     */
+    protected $isEmbedded = false;
+
+    /**
+     * @var string
+     */
+    protected $id;
+
+    /**
      * Attachment constructor.
      *
-     * @param string $file_name
+     * @param string $filename
+     * @param bool   $isEmbedded
      */
-    public function __construct($file_name)
+    public function __construct($filename, $isEmbedded = false)
     {
-        parent::__construct($file_name);
+        parent::__construct($filename);
 
         $this->setAttachmentFilename($this->getBasename());
+        $this->setIsEmbedded($isEmbedded);
     }
 
     /**
@@ -48,6 +60,64 @@ class Attachment extends \SplFileObject
         $this->attachmentFilename = $attachmentFilename;
 
         return $this;
+    }
+
+    /**
+     * Tells if attachment is embedded
+     *
+     * @return boolean
+     */
+    public function getIsEmbedded()
+    {
+        return $this->isEmbedded;
+    }
+
+    /**
+     * Set if attachment is embedded
+     *
+     * @param boolean $isEmbedded
+     */
+    public function setIsEmbedded($isEmbedded)
+    {
+        $this->isEmbedded = $isEmbedded;
+    }
+
+    /**
+     * Get attachment ID
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        if (is_null($this->id)) {
+            $this->id = md5(getmypid().'.'.time().'.'.uniqid(mt_rand(), true)) . '@mailer.generated';
+        }
+
+        return $this->id;
+    }
+
+    /**
+     * Set attachment ID
+     *
+     * @param string $id
+     *
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get attachment CID
+     *
+     * @return string
+     */
+    public function getCid()
+    {
+        return 'cid:' . $this->getId();
     }
 
     /**

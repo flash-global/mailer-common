@@ -131,12 +131,16 @@ class MailTest extends Unit
                 [
                     'filename' => 'with-composer.png',
                     'mime_type' => 'image/png',
-                    'contents' => base64_encode(file_get_contents(__DIR__ . '/../../_data/with-composer.png'))
+                    'contents' => base64_encode(file_get_contents(__DIR__ . '/../../_data/with-composer.png')),
+                    'is_embedded' => false,
+                    'id' => null
                 ],
                 [
                     'filename' => 'php.pdf',
                     'mime_type' => 'application/pdf',
-                    'contents' => base64_encode(file_get_contents(__DIR__ . '/../../_data/php.pdf'))
+                    'contents' => base64_encode(file_get_contents(__DIR__ . '/../../_data/php.pdf')),
+                    'is_embedded' => false,
+                    'id' => null
                 ],
                 ['a array']
             ],
@@ -148,12 +152,16 @@ class MailTest extends Unit
                 [
                     'filename' => 'with-composer.png',
                     'mime_type' => 'image/png',
-                    'contents' => base64_encode(file_get_contents(__DIR__ . '/../../_data/with-composer.png'))
+                    'contents' => base64_encode(file_get_contents(__DIR__ . '/../../_data/with-composer.png')),
+                    'is_embedded' => false,
+                    'id' => null
                 ],
                 [
                     'filename' => 'php.pdf',
                     'mime_type' => 'application/pdf',
-                    'contents' => base64_encode(file_get_contents(__DIR__ . '/../../_data/php.pdf'))
+                    'contents' => base64_encode(file_get_contents(__DIR__ . '/../../_data/php.pdf')),
+                    'is_embedded' => false,
+                    'id' => null
                 ],
                 ['a array']
             ],
@@ -165,14 +173,16 @@ class MailTest extends Unit
     {
         $mail = new Mail();
 
-        $mail->addAttachment(new Attachment(__DIR__ . '/../../_data/php.pdf'));
+        $mail->addAttachment((new Attachment(__DIR__ . '/../../_data/php.pdf'))->setId('test'));
 
         $this->assertAttributeEquals(
             [
                 [
                     'filename' => 'php.pdf',
                     'mime_type' => 'application/pdf',
-                    'contents' => base64_encode(file_get_contents(__DIR__ . '/../../_data/php.pdf'))
+                    'contents' => base64_encode(file_get_contents(__DIR__ . '/../../_data/php.pdf')),
+                    'is_embedded' => false,
+                    'id' => 'test'
                 ]
             ],
             'attachments',
@@ -182,6 +192,7 @@ class MailTest extends Unit
         $attachment = new Attachment(__DIR__ . '/../../_data/php.pdf');
         $attachment->setAttachmentFilename('test.txt');
         $attachment->setMimeType('text/plain');
+        $attachment->setId('test');
 
         $mail->clearAttachments();
         $mail->addAttachment($attachment);
@@ -191,7 +202,9 @@ class MailTest extends Unit
                 [
                     'filename' => 'test.txt',
                     'mime_type' => 'text/plain',
-                    'contents' => base64_encode(file_get_contents(__DIR__ . '/../../_data/php.pdf'))
+                    'contents' => base64_encode(file_get_contents(__DIR__ . '/../../_data/php.pdf')),
+                    'is_embedded' => false,
+                    'id' => 'test'
                 ]
             ],
             'attachments',

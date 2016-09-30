@@ -23,7 +23,6 @@ class MailValidator extends AbstractValidator
      */
     public function validate(EntityInterface $mail)
     {
-
         if (!$mail instanceof Mail) {
             throw new Exception('Entity to validate must be an instance of ' . Mail::class);
         }
