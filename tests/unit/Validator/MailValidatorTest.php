@@ -151,6 +151,20 @@ class MailValidatorTest extends Unit
             $validator->getErrors()
         );
         $this->assertFalse($result);
+
+        $mail->setRecipients([' mail@mailer.com']);
+
+        $validator = new MailValidator();
+        $result = $validator->validateAddress($mail->getRecipients(), 'recipients');
+
+        $this->assertTrue($result);
+
+        $mail->setRecipients(['', 'toto@email.com']);
+
+        $validator = new MailValidator();
+        $result = $validator->validateAddress($mail->getRecipients(), 'recipients');
+
+        $this->assertTrue($result);
     }
 
     public function testValidateAttachments()

@@ -84,6 +84,59 @@ class MailTest extends Unit
             ['another@test.com' => 'another@test.com', 'other@test.com' => 'Recipient Name'],
             $mail->getRecipients()
         );
+
+        $mail->setRecipients([' another@test.com', ' other@test.com' => ' Recipient Name']);
+        $this->assertEquals(
+            ['another@test.com' => 'another@test.com', 'other@test.com' => 'Recipient Name'],
+            $mail->getRecipients()
+        );
+
+        $mail->setRecipients([
+            'another@test.com',
+            '',
+            'other@test.com' => 'Recipient Name',
+        ]);
+        $this->assertEquals(
+            ['another@test.com' => 'another@test.com', 'other@test.com' => 'Recipient Name'],
+            $mail->getRecipients()
+        );
+
+        $mail->setRecipients([
+            'another@test.com',
+            '' => '',
+            'other@test.com' => 'Recipient Name',
+        ]);
+        $this->assertEquals(
+            ['another@test.com' => 'another@test.com', 'other@test.com' => 'Recipient Name'],
+            $mail->getRecipients()
+        );
+
+        $mail->setRecipients([
+            'another@test.com',
+            'email@test.com' => '',
+            'other@test.com' => 'Recipient Name',
+        ]);
+        $this->assertEquals(
+            [
+                'another@test.com' => 'another@test.com',
+                'email@test.com' => 'email@test.com',
+                'other@test.com' => 'Recipient Name'
+            ],
+            $mail->getRecipients()
+        );
+
+        $mail->setRecipients([
+            'another@test.com',
+            '' => 'email@test.com',
+            'other@test.com' => 'Recipient Name',
+        ]);
+        $this->assertEquals(
+            [
+                'another@test.com' => 'another@test.com',
+                'other@test.com' => 'Recipient Name'
+            ],
+            $mail->getRecipients()
+        );
     }
 
     public function testCcAccessors()
@@ -99,6 +152,12 @@ class MailTest extends Unit
             ['another@test.com' => 'another@test.com', 'other@test.com' => 'Recipient Name'],
             $mail->getCc()
         );
+
+        $mail->setCc([' another@test.com', ' other@test.com' => ' Recipient Name']);
+        $this->assertEquals(
+            ['another@test.com' => 'another@test.com', 'other@test.com' => 'Recipient Name'],
+            $mail->getCc()
+        );
     }
 
     public function testBccAccessors()
@@ -110,6 +169,12 @@ class MailTest extends Unit
         $this->assertEquals(['test@test.com' => 'test@test.com'], $mail->getBcc());
 
         $mail->setBcc(['another@test.com', 'other@test.com' => 'Recipient Name']);
+        $this->assertEquals(
+            ['another@test.com' => 'another@test.com', 'other@test.com' => 'Recipient Name'],
+            $mail->getBcc()
+        );
+
+        $mail->setBcc([' another@test.com', ' other@test.com' => ' Recipient Name']);
         $this->assertEquals(
             ['another@test.com' => 'another@test.com', 'other@test.com' => 'Recipient Name'],
             $mail->getBcc()
