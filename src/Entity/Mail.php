@@ -362,10 +362,10 @@ class Mail extends AbstractEntity
     {
         return array_filter([
             'subject' => $this->getSubject(),
-            'from' => $this->addressToString($this->getSender()),
-            'to' => $this->addressToString($this->getRecipients()),
-            'cc' => $this->addressToString($this->getCc()),
-            'bcc' => $this->addressToString($this->getBcc())
+            'from' => $this->addressToString((array) $this->getSender()),
+            'to' => $this->addressToString((array) $this->getRecipients()),
+            'cc' => $this->addressToString((array) $this->getCc()),
+            'bcc' => $this->addressToString((array) $this->getBcc())
         ]);
     }
 
