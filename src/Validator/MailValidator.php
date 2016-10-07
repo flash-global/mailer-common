@@ -2,6 +2,8 @@
 
 namespace Fei\Service\Mailer\Validator;
 
+use Egulias\EmailValidator\EmailValidator;
+use Egulias\EmailValidator\Validation\RFCValidation;
 use Fei\Entity\EntityInterface;
 use Fei\Entity\Exception;
 use Fei\Entity\Validator\AbstractValidator;
@@ -111,6 +113,9 @@ class MailValidator extends AbstractValidator
             return false;
         }
 
+        $validator = new EmailValidator();
+        $validation = new RFCValidation();
+
         $success = true;
         foreach ($address as $email => $label) {
             if (!is_scalar($label)) {
@@ -122,7 +127,7 @@ class MailValidator extends AbstractValidator
                 $success = false;
             }
 
-            if (false === filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            if ($validator->isValid($email, $validation) == false) {
                 $this->addError(
                     $field,
                     sprintf('`%s` is not a valid email address for %s `%s`', $email, $field, $label)

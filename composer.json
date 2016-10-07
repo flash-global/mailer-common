@@ -25,7 +25,8 @@
     }
   ],
   "require": {
-    "fei/entities": "^1.0.3"
+    "fei/entities": "^1.0.3",
+    "egulias/email-validator": "^2.1"
   },
   "require-dev": {
     "codeception/codeception": "2.*"
