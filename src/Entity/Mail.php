@@ -57,6 +57,11 @@ class Mail extends AbstractEntity
     protected $attachments = array();
 
     /**
+     * @var array
+     */
+    protected $dispositionNotificationTo = array();
+
+    /**
      * @return string
      */
     public function getSubject()
@@ -352,6 +357,24 @@ class Mail extends AbstractEntity
 
         return $this;
     }
+
+    /**
+     * @return array
+     */
+    public function getDispositionNotificationTo(): array
+    {
+        return $this->dispositionNotificationTo;
+    }
+
+    /**
+     * @param array $dispositionNotificationTo
+     */
+    public function setDispositionNotificationTo(array $dispositionNotificationTo)
+    {
+        $this->dispositionNotificationTo = $dispositionNotificationTo;
+    }
+
+
 
     /**
      * Get mail context

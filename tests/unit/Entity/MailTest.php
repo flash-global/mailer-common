@@ -277,6 +277,24 @@ class MailTest extends Unit
         );
     }
 
+    public function testDispositionNotificationToAccessor()
+    {
+        $mail = new Mail();
+        $mail->setDispositionNotificationTo('test');
+
+        $this->assertAttributeEquals(['test' => 'test'], 'dispositionNotificationTo', $mail);
+        $this->assertEquals(['test' => 'test'], $mail->getDispositionNotificationTo());
+
+        $mail->setDispositionNotificationTo('email@email.com');
+        $this->assertEquals(['email@email.com' => 'email@email.com'], $mail->getDispositionNotificationTo());
+
+        $mail->setDispositionNotificationTo(['email@email.com']);
+        $this->assertEquals(['email@email.com' => 'email@email.com'], $mail->getDispositionNotificationTo());
+
+        $mail->setDispositionNotificationTo(['email@email.com' => 'Name']);
+        $this->assertEquals(['email@email.com' => 'Name'], $mail->getDispositionNotificationTo());
+    }
+
     public function testGetContext()
     {
         $mail = new Mail([
