@@ -313,4 +313,12 @@ class MailTest extends Unit
             'bcc' => 'Hello <hello@world.com>, Tata <tata@tonton.com>, Test <test@example.com>'
         ], $mail->getContext());
     }
+
+    public function testRecipientsSetterIdiotProofMode()
+    {
+        $mail = new Mail();
+        $mail->setRecipients('test@test.com');
+        $this->assertEquals(['test@test.com' => 'test@test.com'], $mail->getRecipients());
+    }
+
 }

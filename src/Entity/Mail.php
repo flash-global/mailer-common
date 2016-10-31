@@ -174,8 +174,19 @@ class Mail extends AbstractEntity
      *
      * @return $this
      */
-    public function setRecipients(array $recipients)
+    public function setRecipients($recipients)
     {
+        // idiot proof patch
+        if(is_string($recipients))
+        {
+            $recipients = [$recipients];
+        }
+
+        if(!is_array($recipients))
+        {
+            throw new \TypeError('$recipients parameter is expected to be an array or a string');
+        }
+
         $this->initAddress($recipients, 'recipients');
 
         return $this;
