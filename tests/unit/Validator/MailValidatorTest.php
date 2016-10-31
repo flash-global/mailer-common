@@ -64,20 +64,6 @@ class MailValidatorTest extends Unit
         $this->assertEmpty($validator->getErrors());
     }
 
-    public function testBodyValidation()
-    {
-        $validator = new MailValidator();
-        $mail = new Mail();
-
-        $result = $validator->validateBody($mail->getTextBody(), $mail->getHtmlBody());
-        $this->assertFalse($result);
-        $this->assertNotEmpty($validator->getErrors());
-        $this->assertEquals(
-            ['body' => ['Both text and html bodies are empty']],
-            $validator->getErrors()
-        );
-    }
-
     public function testValidateSender()
     {
         $validator = new MailValidator();

@@ -57,6 +57,11 @@ class Mail extends AbstractEntity
     protected $attachments = array();
 
     /**
+     * @var array
+     */
+    protected $dispositionNotificationTo = array();
+
+    /**
      * @return string
      */
     public function getSubject()
@@ -168,18 +173,18 @@ class Mail extends AbstractEntity
      * @param array $recipients
      *
      * @return $this
+     *
+     * @throws \TypeError
      */
     public function setRecipients($recipients)
     {
         // idiot proof patch
-        if(is_string($recipients))
-        {
+        if (is_string($recipients)) {
             $recipients = [$recipients];
         }
 
-        if(!is_array($recipients))
-        {
-            throw new \TypeError('$recipients parameter is expected to be an array or a string');
+        if (!is_array($recipients)) {
+            throw new \LogicException('$recipients parameter is expected to be an array or a string');
         }
 
         $this->initAddress($recipients, 'recipients');
@@ -292,6 +297,49 @@ class Mail extends AbstractEntity
     public function clearBcc()
     {
         $this->bcc = array();
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDispositionNotificationTo()
+    {
+        return $this->dispositionNotificationTo;
+    }
+
+    /**
+     * @param array $dispositionNotificationTo
+     *
+     * @return $this
+     */
+    public function setDispositionNotificationTo(array $dispositionNotificationTo)
+    {
+        $this->initAddress($dispositionNotificationTo, 'dispositionNotificationTo');
+
+        return $this;
+    }
+
+    /**
+     * @param string $dispositionNotificationTo
+     * @param string $label
+     *
+     * @return $this
+     */
+    public function addDispositionNotificationTo($dispositionNotificationTo, $label)
+    {
+        $this->addAddress($dispositionNotificationTo, $label, 'dispositionNotificationTo');
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function clearDispositionNotificationTo()
+    {
+        $this->dispositionNotificationTo = array();
 
         return $this;
     }

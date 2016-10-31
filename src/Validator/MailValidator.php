@@ -36,6 +36,7 @@ class MailValidator extends AbstractValidator
         $this->validateAddress($mail->getRecipients(), 'recipients');
         $this->validateAddress($mail->getCc(), 'cc', false);
         $this->validateAddress($mail->getBcc(), 'bcc', false);
+        $this->validateAddress($mail->getDispositionNotificationTo(), 'dispositionNotificationTo', false);
         $this->validateAttachments($mail->getAttachments());
 
         $errors = $this->getErrors();
@@ -53,22 +54,6 @@ class MailValidator extends AbstractValidator
         if (empty($subject)) {
             $this->addError('subject', 'Subject is empty');
 
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param string $textBody
-     * @param string $htmlBody
-     *
-     * @return bool
-     */
-    public function validateBody($textBody, $htmlBody)
-    {
-        if (empty($textBody) && empty($htmlBody)) {
-            $this->addError('body', 'Both text and html bodies are empty');
             return false;
         }
 

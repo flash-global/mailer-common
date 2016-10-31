@@ -277,6 +277,21 @@ class MailTest extends Unit
         );
     }
 
+    public function testDispositionNotificationToAccessor()
+    {
+        $mail = new Mail();
+        $mail->setDispositionNotificationTo(['test']);
+
+        $this->assertAttributeEquals(['test' => 'test'], 'dispositionNotificationTo', $mail);
+        $this->assertEquals(['test' => 'test'], $mail->getDispositionNotificationTo());
+
+        $mail->setDispositionNotificationTo(['email@email.com']);
+        $this->assertEquals(['email@email.com' => 'email@email.com'], $mail->getDispositionNotificationTo());
+
+        $mail->setDispositionNotificationTo(['email@email.com' => 'Name']);
+        $this->assertEquals(['email@email.com' => 'Name'], $mail->getDispositionNotificationTo());
+    }
+
     public function testGetContext()
     {
         $mail = new Mail([
@@ -303,4 +318,12 @@ class MailTest extends Unit
         $this->assertEquals(['test@test.com' => 'test@test.com'], $mail->getRecipients());
     }
 
+    public function testRecipientsSetterThrowException()
+    {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('$recipients parameter is expected to be an array or a string');
+
+        $mail = new Mail();
+        $mail->setRecipients(1);
+    }
 }
