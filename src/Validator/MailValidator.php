@@ -73,7 +73,7 @@ class MailValidator extends AbstractValidator
         }
 
         if (false === filter_var(key($sender), FILTER_VALIDATE_EMAIL)) {
-            $this->addError('sender', 'Sender recipient must be a valid email address');
+            $this->addError('sender', sprintf('Sender recipient `%s` must be a valid email address', key($sender)));
 
             return false;
         }

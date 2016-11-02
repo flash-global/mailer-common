@@ -89,7 +89,10 @@ class MailValidatorTest extends Unit
         $result = $validator->validateSender($mail->getSender());
         $this->assertNotEmpty($validator->getErrors());
         $this->assertFalse($result);
-        $this->assertEquals(['sender' => ['Sender recipient must be a valid email address']], $validator->getErrors());
+        $this->assertEquals(
+            ['sender' => ['Sender recipient `not a email` must be a valid email address']],
+            $validator->getErrors()
+        );
     }
 
     public function testValidateAddress()
