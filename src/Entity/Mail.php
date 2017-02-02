@@ -419,13 +419,13 @@ class Mail extends AbstractEntity
      */
     public function getContext()
     {
-        return array_filter([
+        return array_filter(array(
             'subject' => $this->getSubject(),
             'from' => $this->addressToString((array) $this->getSender()),
             'to' => $this->addressToString((array) $this->getRecipients()),
             'cc' => $this->addressToString((array) $this->getCc()),
             'bcc' => $this->addressToString((array) $this->getBcc())
-        ]);
+        ));
     }
 
     /**
@@ -492,7 +492,7 @@ class Mail extends AbstractEntity
      */
     protected function addressToString(array $field)
     {
-        $address = [];
+        $address = array();
         foreach ($field as $key => $value) {
             $address[] = $key == $value ? $value : sprintf('%s <%s>', $value, $key);
         }
