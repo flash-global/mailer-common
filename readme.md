@@ -1,0 +1,2 @@
+# Mailer common
+[![GitHub license](https://img.shields.io/github/license/flash-global/mailer-common.svg)](https://github.com/flash-global/mailer-common)![continuousphp](https://img.shields.io/continuousphp/git-hub/flash-global/mailer-common.svg)[![GitHub issues](https://img.shields.io/github/issues/flash-global/mailer-common.svg)](https://github.com/flash-global/mailer-common/issues)
