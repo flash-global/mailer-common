@@ -33,7 +33,7 @@ class MailValidator extends AbstractValidator
 
         $this->validateSubject($mail->getSubject());
         $this->validateSender($mail->getSender());
-        $this->validateAddress($mail->getRecipients(), 'recipients');
+        $this->validateAddress($mail->getRecipients(), 'recipients', false);
         $this->validateAddress($mail->getCc(), 'cc', false);
         $this->validateAddress($mail->getBcc(), 'bcc', false);
         $this->validateAddress($mail->getDispositionNotificationTo(), 'dispositionNotificationTo', false);
